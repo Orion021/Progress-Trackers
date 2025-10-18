@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Learning Trackers Home</title>
+<style>
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+    padding: 20px;
+    margin: 0;
+    background-color: #f5f7fa;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  /* DARK MODE */
+  .dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+
+  /* Theme toggle */
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #4b6cb7, #182848);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+  }
+  .theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* Cards grid */
+  .trackers-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 18px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* Tracker card */
+  .tracker-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 20px 12px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100px;
+  }
+
+  .tracker-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    background: linear-gradient(145deg, #eef3ff, #d6e0ff);
+  }
+
+  .dark-mode .tracker-card {
+    background: #1e1e1e;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  }
+
+  .dark-mode .tracker-card:hover {
+    background: #2a2a2a;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.6);
+  }
+
+  .tracker-card h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #182848;
+  }
+
+  .dark-mode .tracker-card h2 {
+    color: #e0e0e0;
+  }
+
+  /* Owner info */
+  .owner {
+    text-align: center;
+    font-size: 14px;
+    color: #878787;
+    margin: 35px 0 20px;
+  }
+
+  .owner a {
+    color: #4b6cb7;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .owner a:hover {
+    text-decoration: underline;
+  }
+
+  .dark-mode .owner a {
+    color: #8ab4f8;
+  }
+
+  /* Back to top button */
+  #backToTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #4b6cb7;
+    color: white;
+    border: none;
+    padding: 14px 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    display: none;
+    transition: all 0.3s ease;
+    z-index: 100;
+  }
+  #backToTop:hover {
+    background: #182848;
+    transform: scale(1.1);
+  }
+  .dark-mode #backToTop {
+    background: #8ab4f8;
+    color: #121212;
+  }
+  .dark-mode #backToTop:hover {
+    background: #4b6cb7;
+    color: white;
+  }
+</style>
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle">🌙</button>
+  <h1>Learning Roadmap</h1>
+
+  <div class="owner">
+    Owned By: <a href="https://orion021.github.io/krishnan_t/" target="_blank">Orion021</a>
+  </div>
+
+  <div class="trackers-container" id="trackersContainer"></div>
+
+  <button id="backToTop" onclick="scrollToTop()">↑</button>
+
+  <script>
+    const trackers = [
+      { title: "Frontend Development", file: "Trackers/FrontEnd-Dev.html" },
+      { title: "Python Fundamentals", file: "Trackers/Python-Fundamentals.html" },
+      { title: "Embedded C Programming", file: "Trackers/Embedded-C.html" },
+      { title: "Network Fundamentals", file: "Trackers/Networking-Fundamentals.html" },
+      { title: "Network Security", file: "Trackers/Network-Security.html" }
+    ];
+
+    const container = document.getElementById('trackersContainer');
+
+    trackers.forEach(tracker => {
+      const card = document.createElement('div');
+      card.className = 'tracker-card';
+      card.innerHTML = `<h2>${tracker.title}</h2>`;
+      card.addEventListener('click', () => {
+        window.location.href = tracker.file;
+      });
+      container.appendChild(card);
+    });
+
+    // Dark mode toggle
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      themeBtn.innerText = isDark ? '☀️' : '🌙';
+    });
+
+    const savedTheme = localStorage.getItem('theme');
+    if(savedTheme === 'dark'){
+      document.body.classList.add('dark-mode');
+      themeBtn.innerText = '☀️';
+    }
+
+    // Back to top
+    const backBtn = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+      backBtn.style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+    function scrollToTop(){
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      background-color: #f0f4f8;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dark-mode body {
+      background-color: #1e1e1e;
+      color: #ddd;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #4b6cb7, #182848);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: linear-gradient(135deg, #3a539b, #1c2d5c);
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Progress Wheel */
+    .progress-wheel-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .progress-wheel {
+      width: 140px;
+      height: 140px;
+      position: relative;
+    }
+
+    .progress-wheel svg {
+      transform: rotate(-90deg);
+      width: 140px;
+      height: 140px;
+    }
+
+    .progress-wheel circle {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+    }
+
+    .progress-wheel .bg {
+      stroke: #eee;
+    }
+
+    .progress-wheel .progress {
+      stroke: #4b6cb7;
+      transition: stroke-dashoffset 0.4s ease;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 22px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .dark-mode .progress-text {
+      color: #fff;
+    }
+
+    /* Ownership Section */
+    .owner {
+      text-align: center;
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 40px;
+    }
+
+    .owner a {
+      color: #4b6cb7;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .owner a:hover {
+      text-decoration: underline;
+    }
+
+    .dark-mode .owner {
+      color: #ccc;
+    }
+
+    .dark-mode .owner a {
+      color: #8ab4f8;
+    }
+
+    h2 {
+      background: linear-gradient(to right, #4b6cb7, #182848);
+      color: white;
+      padding: 10px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start; /* allow text wrapping */
+      gap: 10px;
+    }
+
+    .dark-mode li {
+      background: #2a2a2a;
+      border-color: #444;
+    }
+
+    li span.topic-text {
+      flex: 1 1 auto; /* text can wrap */
+    }
+
+    .progress-selector {
+      flex: 0 0 auto; /* checkbox fixed, no shrinking */
+      display: flex;
+      align-items: center;
+    }
+
+    .progress-selector input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .clear-button {
+      background-color: #e74c3c;
+      color: white;
+      padding: 4px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Back to Top Button */
+    #backToTop {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #4b6cb7;
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 100;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    #backToTop:hover {
+      background-color: #182848;
+      transform: scale(1.1);
+    }
