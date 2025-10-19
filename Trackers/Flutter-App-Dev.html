@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flutter Full-Stack Developer Path</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <h1>Flutter Full-Stack Developer Path</h1>
+
+  <!-- Progress Wheel -->
+  <div class="progress-wheel-container">
+    <div class="progress-wheel">
+      <svg>
+        <circle class="bg" cx="70" cy="70" r="60"></circle>
+        <circle class="progress" cx="70" cy="70" r="60"></circle>
+      </svg>
+      <div class="progress-text" id="progressPercent">0%</div>
+    </div>
+  </div>
+
+  <!-- Ownership info -->
+  <div class="owner">
+    Made By: <a href="https://orion021.github.io/krishnan_t/" target="_blank">Orion021</a>
+  </div>
+
+  <div id="topics-container"></div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" onclick="scrollToTop()">↑</button>
+
+  <script>
+    const sections = {
+      "1. Prerequisites": [
+        "Basic Programming Concepts (Variables, Loops, Functions)",
+        "OOP Concepts (Classes, Objects, Inheritance, Polymorphism)",
+        "Basic Understanding of Git & GitHub",
+        "Familiarity with APIs and JSON"
+      ],
+
+      "2. Dart Fundamentals": [
+        "Dart Basics (Syntax, Data Types, Variables)",
+        "Operators & Expressions",
+        "Control Flow (if, for, while, switch)",
+        "Functions & Arrow Functions",
+        "Collections (List, Set, Map)",
+        "Null Safety",
+        "Exception Handling",
+        "Classes & Objects",
+        "Constructors",
+        "Inheritance & Polymorphism",
+        "Abstract Classes & Interfaces",
+        "Mixins & Extensions",
+        "Async Programming (Future, async/await, Streams)",
+        "Projects: CLI Calculator, To-Do CLI App, Weather CLI App"
+      ],
+
+      "3. Flutter Fundamentals (Frontend Development)": [
+        "Flutter Installation & Setup",
+        "Widget Tree, StatelessWidget, StatefulWidget",
+        "Common Widgets: Text, Image, Container, Row, Column, Stack",
+        "Buttons, Icons, ListView, GridView",
+        "Layouts & Alignment (Padding, Margin, Flex)",
+        "Theming & Styling",
+        "Navigation & Routes",
+        "Forms & Validation",
+        "Dialogs, Snackbars, BottomSheets",
+        "Projects: Profile Card App, Counter App, Calculator App, To-Do App, Notes App"
+      ],
+
+      "4. Flutter Intermediate (UI + State Management)": [
+        "State Management: setState, Provider, Riverpod, Bloc, GetX",
+        "Working with Assets (Images, Fonts, JSON)",
+        "Navigation 2.0 & Named Routes",
+        "Implicit & Explicit Animations",
+        "Custom Widgets & UI Design",
+        "Responsive Design (MediaQuery, LayoutBuilder)",
+        "Dark Mode Implementation",
+        "Projects: Expense Tracker, BMI Calculator, Quiz App, Music Player"
+      ],
+
+      "5. Working with APIs & Networking": [
+        "HTTP Package",
+        "Fetching JSON Data",
+        "Parsing JSON into Model Classes",
+        "RESTful API Integration",
+        "Handling Loading & Error States",
+        "Pagination, Filtering, Search",
+        "Projects: Weather App, News App, Unsplash Wallpaper App, Crypto Price Tracker"
+      ],
+
+      "6. Local Storage & Database Integration": [
+        "SharedPreferences",
+        "Local JSON Files",
+        "SQLite with sqflite package",
+        "Hive Database",
+        "Moor/Drift ORM",
+        "Projects: Offline Notes App, Password Manager, Budget Tracker"
+      ],
+
+      "7. Firebase Integration (Backend-as-a-Service)": [
+        "Firebase Setup & Configuration",
+        "Authentication (Email/Password, Google Sign-In)",
+        "Firestore Database (CRUD)",
+        "Firebase Storage (Upload Images)",
+        "Firebase Cloud Messaging (Push Notifications)",
+        "Firebase Hosting & Deployment",
+        "Projects: Chat App, Instagram Clone, E-Commerce App"
+      ],
+
+      "8. Advanced Flutter (Backend & Architecture)": [
+        "App Architecture (MVC, MVVM, Clean Architecture)",
+        "Dependency Injection",
+        "Advanced Navigation",
+        "Custom Animations & Lottie",
+        "Performance Optimization",
+        "Testing (Unit, Widget)",
+        "Version Control with Git",
+        "Continuous Integration (CI/CD)",
+        "Projects: Movie App, Social Media App, Fitness Tracker, E-Learning App"
+      ],
+
+      "9. Full Stack Flutter (Custom Backend)": [
+        "Option A: Flutter + Node.js + MongoDB",
+        "Option B: Flutter + Django + PostgreSQL",
+        "Option C: Flutter + Firebase Hybrid",
+        "Projects: Blog App, Task Manager, Food Delivery App"
+      ],
+
+      "10. Deployment & DevOps": [
+        "App Signing & Release (Android & iOS)",
+        "App Store / Play Store Deployment",
+        "Web Deployment",
+        "GitHub Actions / Codemagic CI/CD",
+        "Version Control & Collaboration",
+        "Projects: Publish to Play Store, Host on Firebase"
+      ],
+
+      "11. Optional Specializations": [
+        "UI/UX: Animations Mastery, Custom Paint & Canvas, Material 3",
+        "Backend: Cloud Functions, GraphQL APIs, Docker",
+        "AI & IoT: TensorFlow Lite, MQTT Dashboard"
+      ],
+
+      "12. Capstone Projects": [
+        "Full Stack E-Commerce App (Flutter + Node.js)",
+        "Social Media App (Flutter + Firebase)",
+        "Video Streaming App",
+        "Smart Home IoT Controller",
+        "AI-Powered Chat Assistant (Flutter + OpenAI API)"
+      ]
+    };
+
+    const container = document.getElementById('topics-container');
+
+    Object.entries(sections).forEach(([section, topics]) => {
+      const sectionEl = document.createElement('div');
+      sectionEl.innerHTML = `<h2>${section} <button class="clear-button" onclick="clearSection('${section}')">Clear All</button></h2>`;
+      const listEl = document.createElement('ul');
+
+      topics.forEach((topic, index) => {
+        const topicId = `${section}-${index}`;
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="topic-text">${topic}</span>
+          <div class="progress-selector">
+            <input type="checkbox" data-id="${topicId}" onclick="setProgress('${topicId}', this.checked)">
+          </div>`;
+        listEl.appendChild(li);
+      });
+
+      sectionEl.appendChild(listEl);
+      container.appendChild(sectionEl);
+    });
+
+    function setProgress(id, checked) {
+      localStorage.setItem(id, checked ? '1' : '0');
+      updateOverallProgress();
+    }
+
+    function clearSection(section) {
+      const topics = sections[section];
+      topics.forEach((_, index) => {
+        const topicId = `${section}-${index}`;
+        localStorage.removeItem(topicId);
+        const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+        if (checkbox) checkbox.checked = false;
+      });
+      updateOverallProgress();
+    }
+
+    function restoreProgress() {
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const saved = localStorage.getItem(topicId);
+          const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+          if (checkbox && saved === '1') checkbox.checked = true;
+        });
+      });
+      updateOverallProgress();
+    }
+
+    function updateOverallProgress() {
+      const allTopics = [];
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const checked = localStorage.getItem(topicId) === '1' ? 1 : 0;
+          allTopics.push(checked);
+        });
+      });
+
+      const maxScore = allTopics.length;
+      const currentScore = allTopics.reduce((a, b) => a + b, 0);
+      const percent = maxScore ? Math.round((currentScore / maxScore) * 100) : 0;
+
+      const circle = document.querySelector('.progress');
+      const text = document.getElementById('progressPercent');
+      const radius = 60;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (percent / 100) * circumference;
+
+      circle.style.strokeDasharray = circumference;
+      circle.style.strokeDashoffset = offset;
+      text.textContent = `${percent}%`;
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function restoreTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) document.documentElement.classList.add('dark-mode');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    // Back to Top Logic
+    const backToTopBtn = document.getElementById('backToTop');
+    window.onscroll = function() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
+      }
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    restoreTheme();
+    restoreProgress();
+  </script>
+</body>
+</html>
