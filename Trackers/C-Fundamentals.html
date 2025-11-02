@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>C Fundamentals</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <h1>C Fundamentals</h1>
+
+  <!-- Progress Wheel -->
+  <div class="progress-wheel-container">
+    <div class="progress-wheel">
+      <svg>
+        <circle class="bg" cx="70" cy="70" r="60"></circle>
+        <circle class="progress" cx="70" cy="70" r="60"></circle>
+      </svg>
+      <div class="progress-text" id="progressPercent">0%</div>
+    </div>
+  </div>
+
+  <!-- Ownership info -->
+  <div class="owner">
+    Made By: <a href="https://orion021.github.io/krishnan_t/" target="_blank">Orion021</a>
+  </div>
+
+  <div id="topics-container"></div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" onclick="scrollToTop()">↑</button>
+
+  <script>
+    const sections = {
+        /**
+         * Level 1: Core introduction and environment setup.
+         */
+        "Introduction And Basics": [
+            "History and Importance of C",
+            "Features and Applications of C",
+            "Structure of a C Program",
+            "C Program Execution Process (Compilation, Linking, Execution)",
+            "C Tokens (Keywords, Identifiers, Constants, Strings, Symbols)",
+            "Variables, Constants, and Literals",
+            "Data Types and Type Qualifiers",
+            "Input and Output Functions (printf, scanf, getchar, putchar)",
+            "Comments and Code Readability",
+            "Integrated Development Environment (IDE) Setup",
+            "Basic Syntax Rules (Semicolons, Braces, Case Sensitivity)"
+        ],
+
+        /**
+         * Level 2: Understanding and using operators.
+         */
+        "Operators And Expressions": [
+            "Arithmetic Operators (+, -, *, /, %)",
+            "Relational Operators (==, !=, >, <, >=, <=)",
+            "Logical Operators (&&, ||, !)",
+            "Bitwise Operators (&, |, ^, ~, <<, >>)",
+            "Assignment Operators (=, +=, -=, *=, /=, %=, <<=, >>=, &=, |=, ^=)",
+            "Increment and Decrement Operators (++, --)",
+            "Conditional (Ternary) Operator (?:)",
+            "sizeof Operator",
+            "Comma Operator (,)",
+            "Operator Precedence and Associativity",
+            "Type Casting (Implicit and Explicit)"
+        ],
+
+        /**
+         * Level 3: Control flow and program logic.
+         */
+        "Control Statements": [
+            "Decision Making (if, if-else, nested if)",
+            "Switch Statement",
+            "Looping (for, while, do-while)",
+            "Nested Loops",
+            "Jump Statements (break, continue, goto)",
+            "return Statement",
+            "Program Flow Examples"
+        ],
+
+        /**
+         * Level 4: Functions and modular programming.
+         */
+        "Functions And Modularity": [
+            "Function Declaration and Definition",
+            "Function Arguments and Return Values",
+            "Function Call (Call by Value and Call by Reference)",
+            "Recursive Functions",
+            "Scope and Lifetime of Variables",
+            "Storage Classes (auto, static, register, extern)",
+            "Inline Functions (C99 Feature)",
+            "Header Files and Function Prototypes",
+            "User-Defined vs. Library Functions"
+        ],
+
+        /**
+         * Level 5: Arrays and string manipulation.
+         */
+        "Arrays And Strings": [
+            "One-Dimensional Arrays",
+            "Two-Dimensional Arrays (Matrix Operations)",
+            "Multi-Dimensional Arrays",
+            "Array Initialization and Traversal",
+            "Passing Arrays to Functions",
+            "String Declaration and Initialization",
+            "String Input/Output (gets, puts, scanf, printf)",
+            "String Handling Functions (strlen, strcpy, strcat, strcmp, strrev, etc.)",
+            "Array of Strings",
+            "Common String Manipulation Programs"
+        ],
+
+        /**
+         * Level 6: Structures, Unions, and Enumerations.
+         */
+        "Structures Unions Enums": [
+            "Defining and Declaring Structures",
+            "Accessing Structure Members",
+            "Array of Structures",
+            "Nested Structures",
+            "Passing Structures to Functions",
+            "typedef Keyword",
+            "Union Declaration and Usage",
+            "Difference Between Structure and Union",
+            "Enumerations (enum)",
+            "Structure vs. Class (Conceptual)"
+        ],
+
+        /**
+         * Level 7: Pointers and memory management.
+         */
+        "Pointers And Memory": [
+            "Introduction to Pointers",
+            "Pointer Variables and Dereferencing",
+            "Pointer Arithmetic",
+            "Pointer to Pointer",
+            "Pointers and Arrays",
+            "Pointers and Strings",
+            "Pointers and Functions (Call by Reference)",
+            "Dynamic Memory Allocation (malloc, calloc, realloc, free)",
+            "Memory Leaks and Dangling Pointers",
+            "Null and Void Pointers"
+        ],
+
+        /**
+         * Level 8: File handling in C.
+         */
+        "File Handling": [
+            "File Types (Text vs Binary)",
+            "File Operations (Create, Open, Read, Write, Close)",
+            "File Handling Functions (fopen, fclose, fprintf, fscanf, fgetc, fputc, fread, fwrite)",
+            "File Modes (r, w, a, rb, wb, ab, etc.)",
+            "EOF and Error Handling (feof, ferror, perror)",
+            "Random File Access (fseek, ftell, rewind)",
+            "Practical File Programs (Copy, Count Lines, Merge Files)"
+        ],
+
+        /**
+         * Level 9: Advanced concepts and preprocessor directives.
+         */
+        "Advanced Concepts": [
+            "Command-Line Arguments",
+            "Preprocessor Directives (#define, #include, #ifdef, #ifndef, #undef)",
+            "Macros and Inline Code",
+            "Conditional Compilation",
+            "Memory Layout of C Program",
+            "Dynamic Arrays and Pointer Arrays",
+            "Bitfields",
+            "Error Handling with errno and perror",
+            "Introduction to Makefiles",
+            "C99 and C11 New Features Overview"
+        ],
+
+        /**
+         * Level 10: Projects and debugging practice.
+         */
+        "Projects And Debugging": [
+            "Simple Calculator using Switch",
+            "Student Record Management System",
+            "File-Based Contact Book",
+            "Matrix Operations (Addition, Multiplication)",
+            "Bank Management System",
+            "Mini Compiler Simulation (Token Analyzer)",
+            "Using GDB for Debugging",
+            "Common Compilation Errors and Fixes",
+            "Code Optimization Tips",
+            "Final Project: Menu-Driven Application"
+        ]
+    };
+
+    const container = document.getElementById('topics-container');
+
+    Object.entries(sections).forEach(([section, topics]) => {
+      const sectionEl = document.createElement('div');
+      sectionEl.innerHTML = `<h2>${section} <button class="clear-button" onclick="clearSection('${section}')">Clear All</button></h2>`;
+      const listEl = document.createElement('ul');
+
+      topics.forEach((topic, index) => {
+        const topicId = `${section}-${index}`;
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="topic-text">${topic}</span>
+          <div class="progress-selector">
+            <input type="checkbox" data-id="${topicId}" onclick="setProgress('${topicId}', this.checked)">
+          </div>`;
+        listEl.appendChild(li);
+      });
+
+      sectionEl.appendChild(listEl);
+      container.appendChild(sectionEl);
+    });
+
+    function setProgress(id, checked) {
+      localStorage.setItem(id, checked ? '1' : '0');
+      updateOverallProgress();
+    }
+
+    function clearSection(section) {
+      const topics = sections[section];
+      topics.forEach((_, index) => {
+        const topicId = `${section}-${index}`;
+        localStorage.removeItem(topicId);
+        const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+        if (checkbox) checkbox.checked = false;
+      });
+      updateOverallProgress();
+    }
+
+    function restoreProgress() {
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const saved = localStorage.getItem(topicId);
+          const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+          if (checkbox && saved === '1') checkbox.checked = true;
+        });
+      });
+      updateOverallProgress();
+    }
+
+    function updateOverallProgress() {
+      const allTopics = [];
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const checked = localStorage.getItem(topicId) === '1' ? 1 : 0;
+          allTopics.push(checked);
+        });
+      });
+
+      const maxScore = allTopics.length;
+      const currentScore = allTopics.reduce((a, b) => a + b, 0);
+      const percent = maxScore ? Math.round((currentScore / maxScore) * 100) : 0;
+
+      const circle = document.querySelector('.progress');
+      const text = document.getElementById('progressPercent');
+      const radius = 60;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (percent / 100) * circumference;
+
+      circle.style.strokeDasharray = circumference;
+      circle.style.strokeDashoffset = offset;
+      text.textContent = `${percent}%`;
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function restoreTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) document.documentElement.classList.add('dark-mode');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    // Back to Top Logic
+    const backToTopBtn = document.getElementById('backToTop');
+    window.onscroll = function() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
+      }
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    restoreTheme();
+    restoreProgress();
+  </script>
+</body>
+</html>
