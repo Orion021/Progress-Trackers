@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>C Fundamentals</title>
+  <title>Python Fundamentals</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+  
 </head>
 <body>
   <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
-  <h1>C Fundamentals</h1>
+  <h1>Python Fundamentals</h1>
 
   <!-- Progress Wheel -->
   <div class="progress-wheel-container">
@@ -20,6 +24,9 @@
       <div class="progress-text" id="progressPercent">0%</div>
     </div>
   </div>
+
+  <button id="generateReport" class="report-button" onclick="generateReport()">Generate Progress Report</button>
+
 
   <!-- Ownership info -->
   <div class="owner">
@@ -294,5 +301,7 @@
     restoreTheme();
     restoreProgress();
   </script>
+  <script src="js\report.js"></script>
+
 </body>
 </html>
