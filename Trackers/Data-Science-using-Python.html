@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Scinece - Python</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+  
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <h1>Data Scinece Using Python</h1>
+
+  <!-- Progress Wheel -->
+  <div class="progress-wheel-container">
+    <div class="progress-wheel">
+      <svg>
+        <circle class="bg" cx="70" cy="70" r="60"></circle>
+        <circle class="progress" cx="70" cy="70" r="60"></circle>
+      </svg>
+      <div class="progress-text" id="progressPercent">0%</div>
+    </div>
+  </div>
+
+  <button id="generateReport" class="report-button" onclick="generateReport()">Generate Progress Report</button>
+
+
+  <!-- Ownership info -->
+  <div class="owner">
+    Made By: <a href="https://orion021.github.io/krishnan_t/" target="_blank">Orion021</a>
+  </div>
+
+  <div id="topics-container"></div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" onclick="scrollToTop()">↑</button>
+
+  <script>
+    const sections = {
+        /**
+         * Level 1: Python Foundations for Data Science
+         */
+        "Python_Fundamentals": [
+            "Introduction to Data Science",
+            "Understanding the Data Science Workflow",
+            "Setting up Python Environment (Anaconda, Jupyter, VS Code)",
+            "Python Basics Review",
+            "Variables and Data Types",
+            "Operators and Expressions",
+            "Input / Output",
+            "Conditional Statements",
+            "Loops (for, while)",
+            "Functions and Lambda Functions",
+            "Exception Handling",
+            "Data Structures (Lists, Tuples, Sets, Dictionaries)",
+            "List Comprehensions",
+            "Nested Structures",
+            "File Handling (Text, CSV, JSON)",
+            "Working with Directories and OS module",
+            "Modules and Packages",
+            "Using Built-in Modules (math, datetime, random, os, sys)"
+        ],
+
+        /**
+         * Level 2: Numerical Computing with NumPy
+         */
+        "NumPy": [
+            "Introduction to NumPy",
+            "Creating and Manipulating Arrays",
+            "Array Indexing, Slicing, and Iterating",
+            "Array Math and Broadcasting",
+            "Universal Functions (ufuncs)",
+            "Aggregation and Statistical Functions",
+            "Linear Algebra with NumPy",
+            "Random Numbers and Simulations",
+            "Reshaping, Stacking, and Splitting Arrays",
+            "Performance Optimization with NumPy"
+        ],
+
+        /**
+         * Level 3: Data Analysis with Pandas
+         */
+        "Pandas": [
+            "Introduction to Pandas",
+            "Series and DataFrame Objects",
+            "Reading & Writing Data (CSV, Excel, JSON, SQL, HTML)",
+            "Data Selection, Indexing, and Filtering",
+            "Handling Missing Data (NaN, dropna, fillna)",
+            "Data Cleaning and Preprocessing",
+            "Sorting, Merging, Concatenation, and Joins",
+            "GroupBy Operations and Aggregations",
+            "Pivot Tables and Cross Tabulations",
+            "Applying Functions and Mapping",
+            "Date-Time Manipulation with Pandas",
+            "Working with Categorical Data",
+            "Exporting Cleaned Data"
+        ],
+
+        /**
+         * Level 4: Data Visualization
+         */
+        "Data_Visualization": [
+            "Introduction to Data Visualization",
+            "Matplotlib Fundamentals",
+            "Plot Types (Line, Bar, Scatter, Histogram, Pie, Boxplot)",
+            "Plot Customization (Titles, Labels, Legends, Colors)",
+            "Subplots and Grids",
+            "Seaborn for Statistical Visualization",
+            "Distribution, Pairplots, Heatmaps, Violinplots",
+            "Categorical and Relational Plots",
+            "Themes and Aesthetics",
+            "Plotly and Cufflinks (Interactive Charts)",
+            "Dashboards with Plotly Dash (Basics)",
+            "Geospatial Visualization (GeoPandas, Folium, Plotly Mapbox)"
+        ],
+
+        /**
+         * Level 5: Data Wrangling & Preprocessing
+         */
+        "Data_Wrangling": [
+            "Understanding Data Quality",
+            "Detecting and Handling Outliers",
+            "Encoding Categorical Variables (Label, One-Hot)",
+            "Feature Scaling (Normalization, Standardization)",
+            "Handling Missing Data Strategically",
+            "Feature Extraction and Selection",
+            "Text Preprocessing (Tokenization, Stopwords, Lemmatization)",
+            "Date-Time Feature Engineering",
+            "Correlation and Multicollinearity Analysis"
+        ],
+
+        /**
+         * Level 6: Exploratory Data Analysis (EDA)
+         */
+        "Exploratory_Data_Analysis": [
+            "Importance of EDA",
+            "Understanding Data Distribution",
+            "Descriptive Statistics and Summary",
+            "Univariate, Bivariate, and Multivariate Analysis",
+            "Correlation and Covariance Analysis",
+            "Outlier Detection and Treatment",
+            "Hypothesis Testing (t-test, chi-square, ANOVA)",
+            "Visual EDA using Seaborn, Pandas Profiling, Sweetviz",
+            "Automating EDA Reports"
+        ],
+
+        /**
+         * Level 7: Statistics and Probability
+         */
+        "Statistics_And_Probability": [
+            "Descriptive vs Inferential Statistics",
+            "Types of Data (Nominal, Ordinal, Interval, Ratio)",
+            "Measures of Central Tendency (Mean, Median, Mode)",
+            "Measures of Dispersion (Range, Variance, Standard Deviation)",
+            "Probability Basics and Distributions (Uniform, Normal, Binomial, Poisson)",
+            "Z-Score and Standardization",
+            "Sampling and Sampling Techniques",
+            "Confidence Intervals",
+            "Hypothesis Testing (p-values, t-tests, ANOVA, Chi-square)",
+            "Correlation vs Causation",
+            "Covariance and Regression Basics"
+        ],
+
+        /**
+         * Level 8: Machine Learning Foundations
+         */
+        "Machine_Learning_Basics": [
+            "Introduction to Machine Learning",
+            "Types of ML (Supervised, Unsupervised, Reinforcement)",
+            "ML Workflow (Data → Model → Evaluate → Deploy)",
+            "Train-Test Split and Cross-Validation",
+            "Evaluation Metrics (Accuracy, Precision, Recall, F1-Score, ROC, AUC, MSE, RMSE)",
+            "Bias-Variance Tradeoff",
+            "Overfitting and Underfitting",
+            "Feature Engineering and Data Scaling",
+            "Model Saving and Loading (joblib, pickle)"
+        ],
+
+        /**
+         * Level 9: Supervised Learning Algorithms
+         */
+        "Supervised_Learning": [
+            "Linear Regression",
+            "Multiple Linear Regression",
+            "Polynomial Regression",
+            "Logistic Regression",
+            "K-Nearest Neighbors (KNN)",
+            "Decision Trees",
+            "Random Forest",
+            "Support Vector Machines (SVM)",
+            "Naive Bayes Classifier",
+            "Gradient Boosting, XGBoost, LightGBM, CatBoost",
+            "Model Evaluation and Comparison"
+        ],
+
+        /**
+         * Level 10: Unsupervised Learning Algorithms
+         */
+        "Unsupervised_Learning": [
+            "Clustering (K-Means, Hierarchical, DBSCAN)",
+            "Dimensionality Reduction (PCA, LDA, t-SNE, UMAP)",
+            "Association Rule Learning (Apriori, FP-Growth)",
+            "Anomaly Detection"
+        ],
+
+        /**
+         * Level 11: Time Series Analysis
+         */
+        "Time_Series_Analysis": [
+            "Introduction to Time Series Data",
+            "Stationarity, Trend, Seasonality",
+            "ACF and PACF Analysis",
+            "AR, MA, ARMA, ARIMA, SARIMA Models",
+            "Forecasting with Prophet",
+            "Time Series Decomposition",
+            "Rolling Statistics and Moving Averages",
+            "Time Series Cross-Validation"
+        ],
+
+        /**
+         * Level 12: Natural Language Processing (NLP)
+         */
+        "Natural_Language_Processing": [
+            "Text Preprocessing (Tokenization, Stopwords, Lemmatization)",
+            "Bag of Words (BoW) and TF-IDF",
+            "Word Embeddings (Word2Vec, GloVe)",
+            "Sentiment Analysis",
+            "Spam Detection",
+            "Named Entity Recognition (NER)",
+            "Text Classification Models",
+            "Topic Modeling (LDA)",
+            "Transformer Models (BERT, GPT Overview)"
+        ],
+
+        /**
+         * Level 13: Deep Learning with Python
+         */
+        "Deep_Learning": [
+            "Introduction to Neural Networks",
+            "Perceptron and Multi-Layer Perceptron",
+            "Activation Functions",
+            "Forward and Backward Propagation",
+            "Gradient Descent and Optimization",
+            "Overfitting, Dropout, and Regularization",
+            "Building Neural Networks with TensorFlow & Keras",
+            "CNN for Image Data",
+            "RNN and LSTM for Sequential Data",
+            "Transfer Learning and Pre-trained Models"
+        ],
+
+        /**
+         * Level 14: Project Lifecycle and Deployment
+         */
+        "Project_And_Deployment": [
+            "Understanding the Problem Statement",
+            "Data Collection and Cleaning",
+            "EDA and Feature Engineering",
+            "Model Building and Evaluation",
+            "Model Tuning (GridSearchCV, RandomizedSearchCV)",
+            "Model Deployment (Flask, FastAPI, Streamlit)",
+            "Version Control (Git & GitHub)",
+            "Documentation and Reporting",
+            "Reproducibility and Pipelines (MLflow, DVC)"
+        ],
+
+        /**
+         * Level 15: Big Data and Cloud Integration
+         */
+        "Big_Data_And_Cloud": [
+            "Introduction to Big Data and Hadoop Ecosystem",
+            "PySpark Basics",
+            "DataFrames and RDDs",
+            "Distributed ML with Spark MLlib",
+            "Cloud Platforms (AWS, GCP, Azure Overview)",
+            "Using Google Colab and Kaggle Kernels",
+            "Working with APIs and Web Scraping (Requests, BeautifulSoup, Selenium)"
+        ],
+
+        /**
+         * Level 16: Capstone Projects (End-to-End)
+         */
+        "Capstone_Projects": [
+            "House Price Prediction",
+            "Customer Churn Analysis",
+            "Sentiment Analysis on Tweets/Reviews",
+            "Sales Forecasting with Time Series",
+            "Image Classification using CNN",
+            "Credit Card Fraud Detection",
+            "Movie Recommendation System",
+            "IoT Sensor Data Analytics"
+        ]
+    };
+
+
+    const container = document.getElementById('topics-container');
+
+    Object.entries(sections).forEach(([section, topics]) => {
+      const sectionEl = document.createElement('div');
+      sectionEl.innerHTML = `<h2>${section} <button class="clear-button" onclick="clearSection('${section}')">Clear All</button></h2>`;
+      const listEl = document.createElement('ul');
+
+      topics.forEach((topic, index) => {
+        const topicId = `${section}-${index}`;
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="topic-text">${topic}</span>
+          <div class="progress-selector">
+            <input type="checkbox" data-id="${topicId}" onclick="setProgress('${topicId}', this.checked)">
+          </div>`;
+        listEl.appendChild(li);
+      });
+
+      sectionEl.appendChild(listEl);
+      container.appendChild(sectionEl);
+    });
+
+    function setProgress(id, checked) {
+      localStorage.setItem(id, checked ? '1' : '0');
+      updateOverallProgress();
+    }
+
+    function clearSection(section) {
+      const topics = sections[section];
+      topics.forEach((_, index) => {
+        const topicId = `${section}-${index}`;
+        localStorage.removeItem(topicId);
+        const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+        if (checkbox) checkbox.checked = false;
+      });
+      updateOverallProgress();
+    }
+
+    function restoreProgress() {
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const saved = localStorage.getItem(topicId);
+          const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+          if (checkbox && saved === '1') checkbox.checked = true;
+        });
+      });
+      updateOverallProgress();
+    }
+
+    function updateOverallProgress() {
+      const allTopics = [];
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const checked = localStorage.getItem(topicId) === '1' ? 1 : 0;
+          allTopics.push(checked);
+        });
+      });
+
+      const maxScore = allTopics.length;
+      const currentScore = allTopics.reduce((a, b) => a + b, 0);
+      const percent = maxScore ? Math.round((currentScore / maxScore) * 100) : 0;
+
+      const circle = document.querySelector('.progress');
+      const text = document.getElementById('progressPercent');
+      const radius = 60;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (percent / 100) * circumference;
+
+      circle.style.strokeDasharray = circumference;
+      circle.style.strokeDashoffset = offset;
+      text.textContent = `${percent}%`;
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function restoreTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) document.documentElement.classList.add('dark-mode');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    // Back to Top Logic
+    const backToTopBtn = document.getElementById('backToTop');
+    window.onscroll = function() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
+      }
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    restoreTheme();
+    restoreProgress();
+  </script>
+  <script src="js\report.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flutter Dev</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+  
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <h1>Flutter App Dev</h1>
+
+  <!-- Progress Wheel -->
+  <div class="progress-wheel-container">
+    <div class="progress-wheel">
+      <svg>
+        <circle class="bg" cx="70" cy="70" r="60"></circle>
+        <circle class="progress" cx="70" cy="70" r="60"></circle>
+      </svg>
+      <div class="progress-text" id="progressPercent">0%</div>
+    </div>
+  </div>
+
+  <button id="generateReport" class="report-button" onclick="generateReport()">Generate Progress Report</button>
+
+
+  <!-- Ownership info -->
+  <div class="owner">
+    Made By: <a href="https://orion021.github.io/krishnan_t/" target="_blank">Orion021</a>
+  </div>
+
+  <div id="topics-container"></div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" onclick="scrollToTop()">↑</button>
+
+  <script>
+    const sections = {
+        /**
+         * Level 1: Core IoT introduction and environment setup.
+         */
+        "Introduction And Basics": [
+            "What is IoT?",
+            "History and Evolution of IoT",
+            "Real-World IoT Applications (Home, Health, Farming, Industry)",
+            "Components of an IoT System (Sensors, Controller, Cloud, User Interface)",
+            "Basics of Electronics (Power, Pins, Safety)",
+            "Raspberry Pi Overview and Versions",
+            "Understanding GPIO Pins (3.3V, 5V, Ground, Input, Output)",
+            "Setting up Raspberry Pi OS",
+            "Remote Access Setup (VNC/Remote Desktop)",
+            "First Python Program on Raspberry Pi",
+            "Basic IoT Data Flow (Sensor → Logic → Output)"
+        ],
+
+        /**
+         * Level 2: Sensor fundamentals and hardware interfacing.
+         */
+        "Sensors And Interfacing": [
+            "What is a Sensor? Types and Use Cases",
+            "Digital vs Analog Signals",
+            "Working Principle of PIR Sensor (Motion Detection)",
+            "Working Principle of LDR Sensor (Light Detection)",
+            "Working Principle of DHT11 Sensor (Temperature/Humidity)",
+            "Working Principle of Soil Moisture Sensor",
+            "Working Principle of Ultrasonic Sensor (Distance Measurement)",
+            "Breadboard Basics and Safe Wiring",
+            "Connecting Sensors to Raspberry Pi GPIO",
+            "Testing Sensors Individually using Python",
+            "Troubleshooting Sensor Errors"
+        ],
+
+        /**
+         * Level 3: Python programming for IoT logic.
+         */
+        "Python For IoT": [
+            "Python Review: Variables, Conditions, Loops",
+            "Functions and Modular Code in Python",
+            "Importing and Using Libraries (time, gpiozero, RPi.GPIO)",
+            "Reading Digital Sensor Inputs",
+            "Controlling Output Devices (LED, Buzzer, Relay)",
+            "Writing Continuous Monitoring Loops",
+            "Threshold-Based Automation Logic",
+            "Logging Sensor Data to a File",
+            "Basic Error Handling in IoT Programs",
+            "Combining Multiple Sensors in One Program"
+        ],
+
+        /**
+         * Level 4: Mini Projects: Smart Home & Weather Station.
+         */
+        "Smart Home And Weather Station": [
+            "Smart Home Automation Concepts",
+            "Motion-Based Lighting System (PIR + LED)",
+            "Day/Night Automatic Light Control (LDR + LED)",
+            "Security Alert System using Motion + Buzzer",
+            "Integrating Multiple Sensors in Home Logic",
+            "Weather Station Overview",
+            "Temperature/Humidity Reading using DHT11",
+            "Creating a Terminal-Based Weather Display",
+            "Tracking Min/Max Temperature in Code",
+            "Recording Weather Logs Automatically"
+        ],
+
+        /**
+         * Level 5: Mini Projects: Health and Plant Monitoring.
+         */
+        "Health And Plant Monitoring": [
+            "Role of IoT in Health Monitoring",
+            "Temperature-Based Health Alert System",
+            "Using Buzzer and Messages for Alerts",
+            "Smart Farming Concepts",
+            "Soil Moisture Detection Logic",
+            "Relay Basics and Water Pump Simulation",
+            "Auto-Irrigation Logic using Python",
+            "Watering Duration and Conditions",
+            "Data Logging for Plant Monitoring",
+            "Testing & Calibrating Soil Thresholds"
+        ],
+
+        /**
+         * Level 6: Cloud basics and Smart Parking.
+         */
+        "Cloud And Smart Parking": [
+            "What is Cloud in IoT? Basic Terminology",
+            "Introduction to Thingspeak Cloud Platform",
+            "Creating API Keys for Data Upload",
+            "Sending Sensor Data to Thingspeak",
+            "Viewing Live IoT Graphs Online",
+            "Ultrasonic Sensor for Parking Detection",
+            "Parking Slot Logic (Empty/Occupied)",
+            "Building a Simple Parking Status Program",
+            "Setting Thresholds for Car Detection",
+            "Displaying Real-Time Parking Updates"
+        ],
+
+        /**
+         * Level 7: Projects, practice, debugging.
+         */
+        "Projects And Debugging": [
+            "Smart Home Automation - Final Integrated Program",
+            "Weather Station - Final Version",
+            "Health Monitoring - Final Version",
+            "Plant Watering System - Final Version",
+            "Smart Parking - Final Version",
+            "Common Hardware Errors and Fixes",
+            "Common Python Errors and Fixes",
+            "Troubleshooting GPIO Issues",
+            "Optimizing IoT Code for Stability",
+            "Final Project: Multi-Sensor IoT Application"
+        ]
+    };
+
+
+    const container = document.getElementById('topics-container');
+
+    Object.entries(sections).forEach(([section, topics]) => {
+      const sectionEl = document.createElement('div');
+      sectionEl.innerHTML = `<h2>${section} <button class="clear-button" onclick="clearSection('${section}')">Clear All</button></h2>`;
+      const listEl = document.createElement('ul');
+
+      topics.forEach((topic, index) => {
+        const topicId = `${section}-${index}`;
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="topic-text">${topic}</span>
+          <div class="progress-selector">
+            <input type="checkbox" data-id="${topicId}" onclick="setProgress('${topicId}', this.checked)">
+          </div>`;
+        listEl.appendChild(li);
+      });
+
+      sectionEl.appendChild(listEl);
+      container.appendChild(sectionEl);
+    });
+
+    function setProgress(id, checked) {
+      localStorage.setItem(id, checked ? '1' : '0');
+      updateOverallProgress();
+    }
+
+    function clearSection(section) {
+      const topics = sections[section];
+      topics.forEach((_, index) => {
+        const topicId = `${section}-${index}`;
+        localStorage.removeItem(topicId);
+        const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+        if (checkbox) checkbox.checked = false;
+      });
+      updateOverallProgress();
+    }
+
+    function restoreProgress() {
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const saved = localStorage.getItem(topicId);
+          const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+          if (checkbox && saved === '1') checkbox.checked = true;
+        });
+      });
+      updateOverallProgress();
+    }
+
+    function updateOverallProgress() {
+      const allTopics = [];
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const checked = localStorage.getItem(topicId) === '1' ? 1 : 0;
+          allTopics.push(checked);
+        });
+      });
+
+      const maxScore = allTopics.length;
+      const currentScore = allTopics.reduce((a, b) => a + b, 0);
+      const percent = maxScore ? Math.round((currentScore / maxScore) * 100) : 0;
+
+      const circle = document.querySelector('.progress');
+      const text = document.getElementById('progressPercent');
+      const radius = 60;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (percent / 100) * circumference;
+
+      circle.style.strokeDasharray = circumference;
+      circle.style.strokeDashoffset = offset;
+      text.textContent = `${percent}%`;
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function restoreTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) document.documentElement.classList.add('dark-mode');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    // Back to Top Logic
+    const backToTopBtn = document.getElementById('backToTop');
+    window.onscroll = function() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
+      }
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    restoreTheme();
+    restoreProgress();
+  </script>
+  <script src="js\report.js"></script>
+
+</body>
+</html>
