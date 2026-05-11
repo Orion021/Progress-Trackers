@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Internet of Things</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
+  <h1>Internet of Things</h1>
+
+  <!-- Progress Wheel -->
+  <div class="progress-wheel-container">
+    <div class="progress-wheel">
+      <svg>
+        <circle class="bg" cx="70" cy="70" r="60"></circle>
+        <circle class="progress" cx="70" cy="70" r="60"></circle>
+      </svg>
+      <div class="progress-text" id="progressPercent">0%</div>
+    </div>
+  </div>
+
+  <!-- Ownership info -->
+  <div class="owner">
+    Made By: <a href="https://orion021.github.io/krishnan_t/" target="_blank">Orion021</a>
+  </div>
+
+  <div id="topics-container"></div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" onclick="scrollToTop()">↑</button>
+
+  <script>
+const sections = {
+
+    /**
+     * Phase 1: Introduction to IoT
+     */
+    "Introduction_To_IoT": [
+        "What is IoT (Internet of Things)",
+        "Evolution of IoT",
+        "Internet vs IoT",
+        "Machine-to-Machine (M2M) Communication",
+        "Characteristics of IoT",
+        "IoT Ecosystem",
+        "IoT Architecture (3-Layer & 5-Layer)",
+        "Components of IoT Systems",
+        "IoT Communication Flow",
+        "Cloud Computing in IoT",
+        "Edge Computing",
+        "Fog Computing",
+        "Real-world IoT Applications",
+        "Consumer IoT",
+        "Industrial IoT (IIoT)",
+        "Healthcare IoT",
+        "Agricultural IoT",
+        "Smart Home Systems",
+        "Smart Cities",
+        "Wearable Devices",
+        "Advantages of IoT",
+        "Challenges in IoT",
+        "Future Trends in IoT",
+    ],
+
+    /**
+     * Phase 2: Electrical & Electronics Fundamentals
+     */
+    "Electronics_Fundamentals": [
+        "Electricity Basics",
+        "Voltage",
+        "Current",
+        "Resistance",
+        "Power",
+        "Energy Consumption",
+        "Ohm’s Law",
+        "AC vs DC",
+        "Conductors, Insulators & Semiconductors",
+        "Series Circuits",
+        "Parallel Circuits",
+        "Circuit Diagrams",
+        "Resistors",
+        "Resistor Color Codes",
+        "Variable Resistors",
+        "Capacitors",
+        "Electrolytic Capacitors",
+        "Ceramic Capacitors",
+        "Diodes",
+        "LEDs",
+        "RGB LEDs",
+        "Transistors",
+        "NPN & PNP Transistors",
+        "Relay Modules",
+        "Breadboard",
+        "Jumper Wires",
+        "Multimeter",
+        "Voltage Measurement",
+        "Current Measurement",
+        "Resistance Measurement",
+        "Continuity Testing",
+        "Power Supplies",
+        "Battery Basics",
+        "Soldering Basics",
+        "PCB Basics",
+        "Safety Practices",
+    ],
+
+    /**
+     * Phase 3: Embedded Systems Fundamentals
+     */
+    "Embedded_Systems": [
+        "What is an Embedded System",
+        "Embedded Systems Architecture",
+        "Microcontroller vs Microprocessor",
+        "CPU, RAM, ROM & Flash Memory",
+        "GPIO (General Purpose Input Output)",
+        "Digital Signals",
+        "Analog Signals",
+        "ADC (Analog to Digital Converter)",
+        "DAC (Digital to Analog Converter)",
+        "PWM (Pulse Width Modulation)",
+        "Timers & Counters",
+        "Interrupts",
+        "Serial Communication Basics",
+        "UART Communication",
+        "SPI Communication",
+        "I2C Communication",
+        "Real-Time Systems",
+        "Embedded System Applications",
+    ],
+
+    /**
+     * Phase 4: Programming Fundamentals
+     */
+    "Programming_Fundamentals": [
+        "Algorithms",
+        "Flowcharts",
+        "Pseudocode",
+        "Variables",
+        "Data Types",
+        "Operators",
+        "Conditional Statements",
+        "Loops",
+        "Functions",
+        "Arrays",
+        "Lists",
+        "Strings",
+        "Object-Oriented Programming Basics",
+        "Classes & Objects",
+        "Exception Handling",
+        "File Handling",
+        "Libraries & Modules",
+        "Package Management",
+        "Debugging Basics",
+        "Code Documentation",
+    ],
+
+    /**
+     * Phase 5: Arduino Development
+     */
+    "Arduino_Development": [
+        "Introduction to Arduino",
+        "Arduino Ecosystem",
+        "Arduino Boards Overview",
+        "Arduino Uno Architecture",
+        "ATmega Microcontroller",
+        "Arduino IDE Installation",
+        "Arduino IDE Interface",
+        "Sketch Structure (setup & loop)",
+        "Digital Input",
+        "Digital Output",
+        "Analog Input",
+        "PWM Output",
+        "Serial Monitor",
+        "Baud Rate",
+        "LED Blink Program",
+        "Push Button Interfacing",
+        "Debouncing",
+        "Reading Sensor Data",
+        "Servo Motor Control",
+        "Relay Control",
+        "Buzzer Control",
+        "Using Arduino Libraries",
+        "Installing Libraries",
+        "Serial Communication with PC",
+        "Arduino Power Management",
+        "Arduino Troubleshooting",
+    ],
+
+    /**
+     * Phase 6: ESP32 Development
+     */
+    "ESP32_Development": [
+        "Introduction to ESP32",
+        "ESP32 Architecture",
+        "ESP32 GPIO",
+        "ESP32 Board Setup",
+        "ESP32 with Arduino IDE",
+        "ESP32 Wi-Fi Features",
+        "Connecting ESP32 to Wi-Fi",
+        "ESP32 Bluetooth Basics",
+        "Bluetooth Low Energy (BLE)",
+        "ESP32 Web Server",
+        "HTTP Requests with ESP32",
+        "ESP32 Sensor Integration",
+        "ESP32 Real-time Monitoring",
+        "ESP32 Deep Sleep",
+        "ESP32 Power Optimization",
+        "ESP32 OTA Updates",
+        "ESP32 MQTT Communication",
+        "ESP32 Web Dashboard",
+    ],
+
+    /**
+     * Phase 7: Raspberry Pi Development
+     */
+    "Raspberry_Pi_Development": [
+        "Introduction to Raspberry Pi",
+        "Raspberry Pi Models",
+        "Raspberry Pi Hardware Overview",
+        "Installing Raspberry Pi OS",
+        "Raspberry Pi Boot Process",
+        "Linux Fundamentals",
+        "Linux File System",
+        "Linux Terminal Commands",
+        "Package Installation",
+        "SSH Remote Access",
+        "GPIO Programming with Python",
+        "GPIO Libraries",
+        "Sensor Interfacing with Raspberry Pi",
+        "Camera Module",
+        "Video Streaming",
+        "Web Servers on Raspberry Pi",
+        "Python Automation Scripts",
+        "Edge Computing Basics",
+        "Raspberry Pi Networking",
+        "Raspberry Pi Troubleshooting",
+    ],
+
+    /**
+     * Phase 8: Sensors
+     */
+    "Sensors": [
+        "Introduction to Sensors",
+        "Analog Sensors",
+        "Digital Sensors",
+        "Sensor Characteristics",
+        "Accuracy",
+        "Precision",
+        "Resolution",
+        "Sensitivity",
+        "Calibration",
+        "Temperature Sensors",
+        "Humidity Sensors",
+        "DHT11 Sensor",
+        "DHT22 Sensor",
+        "LM35 Sensor",
+        "PIR Motion Sensor",
+        "LDR Sensor",
+        "Ultrasonic Sensor",
+        "Gas Sensors (MQ Series)",
+        "Soil Moisture Sensor",
+        "IR Sensors",
+        "Touch Sensors",
+        "Water Level Sensor",
+        "Sensor Data Processing",
+    ],
+
+    /**
+     * Phase 9: Actuators
+     */
+    "Actuators": [
+        "Introduction to Actuators",
+        "Relay Modules",
+        "Servo Motors",
+        "DC Motors",
+        "Stepper Motors",
+        "Motor Drivers",
+        "Buzzer",
+        "Solenoid Valves",
+        "LED Displays",
+        "LCD Displays",
+        "OLED Displays",
+        "Actuator Control Techniques",
+    ],
+
+    /**
+     * Phase 10: Networking & Communication
+     */
+    "Networking_And_Communication": [
+        "Networking Fundamentals",
+        "OSI Model",
+        "TCP/IP Model",
+        "IP Addressing",
+        "MAC Address",
+        "Routers & Switches",
+        "Wi-Fi Basics",
+        "Bluetooth Basics",
+        "BLE (Bluetooth Low Energy)",
+        "Zigbee Basics",
+        "LoRa Basics",
+        "Cellular IoT",
+        "UART",
+        "SPI",
+        "I2C",
+        "HTTP",
+        "HTTPS",
+        "REST APIs",
+        "WebSockets",
+        "MQTT",
+        "MQTT Broker",
+        "MQTT Publish & Subscribe",
+        "MQTT Topics",
+        "CoAP Protocol",
+        "Socket Communication",
+        "Real-time Communication",
+    ],
+
+    /**
+     * Phase 11: Cloud & IoT Platforms
+     */
+    "Cloud_And_IoT_Platforms": [
+        "Introduction to Cloud Computing",
+        "Cloud Service Models (IaaS, PaaS, SaaS)",
+        "IoT Cloud Platforms",
+        "ThingSpeak Platform",
+        "Blynk Platform",
+        "Firebase Basics",
+        "AWS IoT Basics",
+        "Google Cloud IoT Basics",
+        "Data Logging",
+        "Real-time Dashboards",
+        "Data Visualization",
+        "API Integration",
+        "Sending Sensor Data to Cloud",
+        "Receiving Cloud Commands",
+        "Push Notifications",
+        "Alerts & Automation",
+    ],
+
+    /**
+     * Phase 12: Node-RED & Automation
+     */
+    "Node_RED_And_Automation": [
+        "Introduction to Node-RED",
+        "Installing Node-RED",
+        "Node-RED Interface",
+        "Flow-based Programming",
+        "Nodes & Connections",
+        "Inject Node",
+        "Debug Node",
+        "Function Node",
+        "Dashboard Nodes",
+        "MQTT Integration",
+        "HTTP Integration",
+        "Automation Workflows",
+        "IoT Dashboards",
+        "API Integration",
+        "Real-time Monitoring",
+    ],
+
+    /**
+     * Phase 13: IoT Security
+     */
+    "IoT_Security": [
+        "Introduction to IoT Security",
+        "Security Challenges in IoT",
+        "Authentication",
+        "Authorization",
+        "Encryption Basics",
+        "Symmetric Encryption",
+        "Asymmetric Encryption",
+        "SSL/TLS",
+        "HTTPS Security",
+        "Secure MQTT",
+        "API Security",
+        "Device Security",
+        "Firmware Security",
+        "OTA Updates",
+        "Network Security",
+        "Data Privacy",
+        "Secure Coding Practices",
+    ],
+
+    /**
+     * Phase 14: AI & Advanced IoT
+     */
+    "Advanced_IoT": [
+        "Edge AI",
+        "TinyML",
+        "AI + IoT",
+        "Computer Vision Basics",
+        "Voice-controlled Systems",
+        "Smart Home Automation",
+        "Smart Agriculture",
+        "Smart Healthcare",
+        "Industrial IoT (IIoT)",
+        "Smart Cities",
+        "Predictive Maintenance",
+        "Digital Twins",
+        "Industry 4.0",
+        "Autonomous Systems",
+    ],
+
+    /**
+     * Phase 15: Testing, Deployment & Maintenance
+     */
+    "Testing_Deployment_And_Maintenance": [
+        "IoT Testing Fundamentals",
+        "Hardware Testing",
+        "Sensor Calibration Testing",
+        "Debugging IoT Systems",
+        "Network Troubleshooting",
+        "Performance Optimization",
+        "Power Optimization",
+        "Deployment Strategies",
+        "Remote Device Management",
+        "Firmware Updates",
+        "System Monitoring",
+        "Maintenance Practices",
+        "Scalability Considerations",
+        "Reliability Engineering",
+    ],
+
+    /**
+     * Phase 16: Projects & Real-world Applications
+     */
+    "Projects_And_Applications": [
+        "Smart LED System",
+        "Automatic Night Lamp",
+        "Temperature Monitoring System",
+        "Motion Detection System",
+        "Home Automation System",
+        "Smart Irrigation System",
+        "IoT Weather Station",
+        "Smart Parking System",
+        "Energy Monitoring System",
+        "Health Monitoring System",
+        "AI Surveillance System",
+        "Industrial Monitoring System",
+        "Smart Attendance System",
+        "Voice-controlled IoT System",
+    ]
+};
+
+
+    const container = document.getElementById('topics-container');
+
+    Object.entries(sections).forEach(([section, topics]) => {
+      const sectionEl = document.createElement('div');
+      sectionEl.innerHTML = `<h2>${section} <button class="clear-button" onclick="clearSection('${section}')">Clear All</button></h2>`;
+      const listEl = document.createElement('ul');
+
+      topics.forEach((topic, index) => {
+        const topicId = `${section}-${index}`;
+        const li = document.createElement('li');
+        li.innerHTML = `<span class="topic-text">${topic}</span>
+          <div class="progress-selector">
+            <input type="checkbox" data-id="${topicId}" onclick="setProgress('${topicId}', this.checked)">
+          </div>`;
+        listEl.appendChild(li);
+      });
+
+      sectionEl.appendChild(listEl);
+      container.appendChild(sectionEl);
+    });
+
+    function setProgress(id, checked) {
+      localStorage.setItem(id, checked ? '1' : '0');
+      updateOverallProgress();
+    }
+
+    function clearSection(section) {
+      const topics = sections[section];
+      topics.forEach((_, index) => {
+        const topicId = `${section}-${index}`;
+        localStorage.removeItem(topicId);
+        const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+        if (checkbox) checkbox.checked = false;
+      });
+      updateOverallProgress();
+    }
+
+    function restoreProgress() {
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const saved = localStorage.getItem(topicId);
+          const checkbox = document.querySelector(`input[data-id='${topicId}']`);
+          if (checkbox && saved === '1') checkbox.checked = true;
+        });
+      });
+      updateOverallProgress();
+    }
+
+    function updateOverallProgress() {
+      const allTopics = [];
+      Object.entries(sections).forEach(([section, topics]) => {
+        topics.forEach((_, index) => {
+          const topicId = `${section}-${index}`;
+          const checked = localStorage.getItem(topicId) === '1' ? 1 : 0;
+          allTopics.push(checked);
+        });
+      });
+
+      const maxScore = allTopics.length;
+      const currentScore = allTopics.reduce((a, b) => a + b, 0);
+      const percent = maxScore ? Math.round((currentScore / maxScore) * 100) : 0;
+
+      const circle = document.querySelector('.progress');
+      const text = document.getElementById('progressPercent');
+      const radius = 60;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference - (percent / 100) * circumference;
+
+      circle.style.strokeDasharray = circumference;
+      circle.style.strokeDashoffset = offset;
+      text.textContent = `${percent}%`;
+    }
+
+    function toggleTheme() {
+      const root = document.documentElement;
+      const isDark = root.classList.toggle('dark-mode');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function restoreTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDark = savedTheme === 'dark';
+      if (isDark) document.documentElement.classList.add('dark-mode');
+      document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+    }
+
+    // Back to Top Logic
+    const backToTopBtn = document.getElementById('backToTop');
+    window.onscroll = function() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        backToTopBtn.style.display = "block";
+      } else {
+        backToTopBtn.style.display = "none";
+      }
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    restoreTheme();
+    restoreProgress();
+  </script>
+</body>
+</html>
